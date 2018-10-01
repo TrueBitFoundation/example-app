@@ -8,6 +8,18 @@ function showTruebitScrypt(hash) {
 
 var incentiveLayer, fileSystem
 
+const taskInfo = {
+    "ipfshash":"QmZGf6QCViGi7VPZSp97EkvDX9NuNyspZvgpXs1Wq73u4L",
+    "codehash":"0xcb1f3611566c137482d4a5b560896d2142a13450915d8e17e7dd9c24736a164c",
+    "memsize":20
+}
+
+function getTruebitScrypt(data) {
+
+    //handle file system work
+    
+}
+
 function runScrypt() {
     data = document.getElementById('input-data').value
     hash = s.crypto_scrypt(data, "foo", 1024, 1, 1, 256)
@@ -21,11 +33,7 @@ function getArtifacts(networkName) {
 
     httpRequest.onreadystatechange = function() {
 	if (httpRequest.readyState === XMLHttpRequest.DONE) {
-	    const artifacts = JSON.parse(httpRequest.responseText)
-
-	    incentiveLayer = window.web3.eth.contract(artifacts.incentiveLayer.abi, artifacts.incentiveLayer.address)
-	    fileSystem = window.web3.eth.contract(artifacts.fileSystem.abi, artifacts.fileSystem.address)
-	    
+	    //get scrypt submitter artifact
 	}
     }
 
