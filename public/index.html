@@ -1,0 +1,22 @@
+<html>
+  <head>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/js-scrypt/1.2.0/scrypt.min.js"></script>
+    <script>
+      let s
+      scrypt_module_factory(function (scrypt) {
+        s = scrypt
+      });
+    </script>
+    <script src="js/app.js"></script>
+  </head>
+  <body>
+    
+    <div>Make an Scrypt hash of the text using TrueBit</div>
+    <textarea rows="1" cols="100" id="input-data"></textarea>
+    <button onclick="runScrypt()">Submit</button>
+    
+    <div id="js-scrypt"></div>
+    <div id="tb-scrypt"></div>
+
+  </body>  
+</html>  
