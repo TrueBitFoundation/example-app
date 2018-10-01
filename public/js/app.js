@@ -20,6 +20,7 @@ function getArtifacts(networkName) {
     httpRequest.onreadystatechange = function() {
 	if (httpRequest.readyState === XMLHttpRequest.DONE) {
 	    const artifacts = JSON.parse(httpRequest.responseText)
+	    alert(Object.keys(artifacts))
 	}
     }
 
