@@ -6,6 +6,8 @@ function showTruebitScrypt(hash) {
     return "<div>Scrypt Hash from TrueBit solver:</div> <div>" + hash + "</div>"
 }
 
+var incentiveLayer, fileSystem
+
 function runScrypt() {
     data = document.getElementById('input-data').value
     hash = s.crypto_scrypt(data, "foo", 1024, 1, 1, 256)
@@ -20,7 +22,10 @@ function getArtifacts(networkName) {
     httpRequest.onreadystatechange = function() {
 	if (httpRequest.readyState === XMLHttpRequest.DONE) {
 	    const artifacts = JSON.parse(httpRequest.responseText)
-	    alert(Object.keys(artifacts))
+
+	    incentiveLayer = window.web3.eth.contract(artifacts.incentiveLayer.abi, artifacts.incentiveLayer.address)
+	    fileSystem = window.web3.eth.contract(artifacts.fileSystem.abi, artifacts.fileSystem.address)
+	    
 	}
     }
 
