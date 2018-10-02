@@ -37,4 +37,6 @@ node index.js
 
 And navigate to `localhost:3000` in a MetaMask compatible browser.
 
+Make sure to connect MetaMask to localhost:8545, and send the initial account some Ether so it can send transactions.
+
 
