@@ -36,7 +36,7 @@ async function deploy() {
     let args = [
 	artifacts.incentiveLayer.address,
 	artifacts.tru.address,
-	artifacts.fileSystem,
+	artifacts.fileSystem.address,
 	info.ipfshash,
 	info.codehash
     ]
@@ -47,7 +47,7 @@ async function deploy() {
 
     let tru = new web3.eth.Contract(artifacts.tru.abi, artifacts.tru.address)
 
-    tru.transfer(c._address, "100000000000", {from: accounts[0], gas:200000})
+    tru.methods.transfer(c._address, "100000000000").send({from: accounts[0], gas:200000})
 
     fs.writeFileSync("export.json", JSON.stringify({
 	address: c._address,
