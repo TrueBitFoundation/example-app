@@ -3,3 +3,5 @@ node_modules
 truebit-os
 
 export.json
+
+public/js/bundle.js

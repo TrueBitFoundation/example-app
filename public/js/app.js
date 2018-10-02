@@ -1,3 +1,5 @@
+const truffleContract = require('truffle-contract')
+
 function showJSScrypt(hash) {
     return "<div>Scrypt Hash from js-scrypt:</div> <div>" + hash + "</div>"
 }
@@ -10,39 +12,31 @@ var fileSystem, scryptSubmitter, account
 
 function getTruebitScrypt(data) {
 
-    let hash = "default"
-    
-    scryptSubmitter.submitData(data, {gas: 200000}, function(error, txHash) {
-	if(error) {
-	    alert(error)
-	} else if(txHash) {
-	    
-	    let f = window.web3.filter()
+    return scryptSubmitter.submitData(data, {gas: 200000}).then(function(txHash) {
 
-	    f.watch(function(error, result) {
-		if (error) {
-		    alert(error)
-		} else if(result) {
-		    f.stopWatching()
+	const gotFilesEvent = scryptSubmitter.GotFiles()
 
-		    let fileID = result.args.files[0]
-
-		    fileSystem.getData.call(fileID, function (error, result) {
-			if(error) {
-			    alert(error)
-			} else if(result) {
-			    hash = result[0]
-			}
-		    })
+	let fileID = new Promise((resolve, reject) => {
+	    gotFilesEvent.watch(function(err, result) {
+		if (result) {
+		    gotFilesEvent.stopWatching(x => {})
+		    resolve(result.args.files[0])		    
+		} else if(err) {
+		    reject()
 		}
-	    })
-	}
-    })
+	    })	    
+	})
 
-    return hash
+	return fileID
+    }).then(function(fileID) {
+	return scryptSubmitter.getData.call(fileID)
+    }).then(function(lst) {
+	return lst[0]
+    })
+    
 }
 
-function runScrypt() {
+window.runScrypt = function () {
     data = document.getElementById('input-data').value
     hash = s.crypto_scrypt(data, "foo", 1024, 1, 1, 256)
     document.getElementById('js-scrypt').innerHTML = showJSScrypt(s.to_hex(hash))
@@ -55,14 +49,26 @@ function runScrypt() {
 function getArtifacts(networkName) {
     httpRequest = new XMLHttpRequest()
 
-    httpRequest.onreadystatechange = function() {
+    httpRequest.onreadystatechange = async function() {
 	if (httpRequest.readyState === XMLHttpRequest.DONE) {
 	    //get scrypt submitter artifact
 	    const artifacts = JSON.parse(httpRequest.responseText)
 
-	    fileSystem = window.web3.eth.contract(artifacts.fileSystem.abi).at(artifacts.fileSystem.address)
+	    fileSystem = truffleContract({
+		abi: artifacts.fileSystem.abi,
+	    })
 
-	    scryptSubmitter = window.web3.eth.contract(artifacts.scrypt.abi).at(artifacts.scrypt.address)
+	    fileSystem.setProvider(window.web3.currentProvider)
+
+	    fileSystem = await fileSystem.at(artifacts.fileSystem.address)
+
+	    scryptSubmitter = truffleContract({
+		abi: artifacts.scrypt.abi
+	    })
+
+	    scryptSubmitter.setProvider(window.web3.currentProvider)
+
+	    scryptSubmitter = await scryptSubmitter.at(artifacts.scrypt.address)
 
 	    account = window.web3.eth.defaultAccount
 	}
