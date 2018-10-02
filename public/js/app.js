@@ -6,23 +6,38 @@ function showTruebitScrypt(hash) {
     return "<div>Scrypt Hash from TrueBit solver:</div> <div>" + hash + "</div>"
 }
 
-var fileSystem, scryptSubmitter
+var fileSystem, scryptSubmitter, account
 
 function getTruebitScrypt(data) {
 
-    let hash = "default"    
+    let hash = "default"
     
-    scryptSubmitter.methods.submitData(data).send({gas: 200000}, function(error, txHash) {
-	scryptSubmitter.once('GotFiles', function(error, event) {
-	    if (event) {
-		let fileID = event.args.files[0]
+    scryptSubmitter.submitData(data, {gas: 200000}, function(error, txHash) {
+	if(error) {
+	    alert(error)
+	} else if(txHash) {
+	    
+	    let f = window.web3.filter()
 
-		fileSystem.methods.getData(fileID).call(function(error, result) {
-		    hash = result[0]
-		})
-	    }
-	})	
-    })   
+	    f.watch(function(error, result) {
+		if (error) {
+		    alert(error)
+		} else if(result) {
+		    f.stopWatching()
+
+		    let fileID = result.args.files[0]
+
+		    fileSystem.getData.call(fileID, function (error, result) {
+			if(error) {
+			    alert(error)
+			} else if(result) {
+			    hash = result[0]
+			}
+		    })
+		}
+	    })
+	}
+    })
 
     return hash
 }
@@ -45,8 +60,11 @@ function getArtifacts(networkName) {
 	    //get scrypt submitter artifact
 	    const artifacts = JSON.parse(httpRequest.responseText)
 
-	    fileSystem = window.web3.eth.contract(artifacts.fileSystem.abi, artifacts.fileSystem.address)
-	    scryptSubmitter = window.web3.eth.contract(artifacts.scrypt.abi, artifacts.scrypt.address)
+	    fileSystem = window.web3.eth.contract(artifacts.fileSystem.abi).at(artifacts.fileSystem.address)
+
+	    scryptSubmitter = window.web3.eth.contract(artifacts.scrypt.abi).at(artifacts.scrypt.address)
+
+	    account = window.web3.eth.defaultAccount
 	}
     }
 
