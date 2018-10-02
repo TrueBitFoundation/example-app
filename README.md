@@ -28,7 +28,13 @@ This will start up the shell. We can start a solver on account 1 like so:
 start solve -a 1
 ```
 
-Now we will be able to send tasks to the solver via our simple webapp.
+We need to deploy the Scrypt contract that the webapp will be interfacing with. We can do this by running:
+
+```
+node deploy.js
+```
+
+Now that we have all the dependencies setup,  we will be able to send tasks to the solver via our simple webapp.
 
 Start up the webapp:
 ```
