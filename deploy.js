@@ -43,7 +43,12 @@ async function deploy() {
 
     let contract = new web3.eth.Contract(abi)
     
-    await contract.deploy({data: "0x" + bin, arguments: args}).send(options)
+    let c = await contract.deploy({data: "0x" + bin, arguments: args}).send(options)
+
+    fs.writeFileSync("export.json", JSON.stringify({
+	address: c._address,
+	abi: c._jsonInterface
+    }))
 }
 
 deploy()
