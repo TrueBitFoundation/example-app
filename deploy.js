@@ -34,9 +34,9 @@ async function deploy() {
     let options = {from: accounts[0].toLowerCase(), gas: 2000000}
 
     let args = [
-	artifacts.incentiveLayer.address.toLowerCase(),
-	artifacts.tru.address.toLowerCase(),
-	artifacts.fileSystem.address.toLowerCase(),
+	artifacts.incentiveLayer.address,
+	artifacts.tru.address,
+	artifacts.fileSystem,
 	info.ipfshash,
 	info.codehash
     ]
@@ -44,6 +44,10 @@ async function deploy() {
     let contract = new web3.eth.Contract(abi)
     
     let c = await contract.deploy({data: "0x" + bin, arguments: args}).send(options)
+
+    let tru = new web3.eth.Contract(artifacts.tru.abi, artifacts.tru.address)
+
+    tru.transfer(c._address, "100000000000", {from: accounts[0], gas:200000})
 
     fs.writeFileSync("export.json", JSON.stringify({
 	address: c._address,

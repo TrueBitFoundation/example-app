@@ -6,18 +6,25 @@ function showTruebitScrypt(hash) {
     return "<div>Scrypt Hash from TrueBit solver:</div> <div>" + hash + "</div>"
 }
 
-var incentiveLayer, fileSystem
-
-const taskInfo = {
-    "ipfshash":"QmZGf6QCViGi7VPZSp97EkvDX9NuNyspZvgpXs1Wq73u4L",
-    "codehash":"0xcb1f3611566c137482d4a5b560896d2142a13450915d8e17e7dd9c24736a164c",
-    "memsize":20
-}
+var fileSystem, scryptSubmitter
 
 function getTruebitScrypt(data) {
 
-    //handle file system work
+    let hash = "default"    
     
+    scryptSubmitter.methods.submitData(data).send({gas: 200000}, function(error, txHash) {
+	scryptSubmitter.once('GotFiles', function(error, event) {
+	    if (event) {
+		let fileID = event.args.files[0]
+
+		fileSystem.methods.getData(fileID).call(function(error, result) {
+		    hash = result[0]
+		})
+	    }
+	})	
+    })   
+
+    return hash
 }
 
 function runScrypt() {
@@ -25,7 +32,9 @@ function runScrypt() {
     hash = s.crypto_scrypt(data, "foo", 1024, 1, 1, 256)
     document.getElementById('js-scrypt').innerHTML = showJSScrypt(s.to_hex(hash))
 
-    document.getElementById('tb-scrypt').innerHTML = showTruebitScrypt("foobar")
+    truHash = getTruebitScrypt(data)
+
+    document.getElementById('tb-scrypt').innerHTML = showTruebitScrypt(truHash)
 }
 
 function getArtifacts(networkName) {
@@ -34,6 +43,10 @@ function getArtifacts(networkName) {
     httpRequest.onreadystatechange = function() {
 	if (httpRequest.readyState === XMLHttpRequest.DONE) {
 	    //get scrypt submitter artifact
+	    const artifacts = JSON.parse(httpRequest.responseText)
+
+	    fileSystem = window.web3.eth.contract(artifacts.fileSystem.abi, artifacts.fileSystem.address)
+	    scryptSubmitter = window.web3.eth.contract(artifacts.scrypt.abi, artifacts.scrypt.address)
 	}
     }
 
