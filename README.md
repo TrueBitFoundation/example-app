@@ -1,5 +1,7 @@
 # TrueBit Example Application
 
+*NOTE* This has only been tried on Ubuntu *NOTE*
+
 This repository serves as an example project that uses truebit-os as a dependency.
 
 # Installation
