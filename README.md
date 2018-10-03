@@ -46,4 +46,20 @@ And navigate to `localhost:3000` in a MetaMask compatible browser.
 
 Make sure to connect MetaMask to localhost:8545, and send the initial account some Ether so it can send transactions.
 
+Once you send the transaction it will wait for the task to complete. The TrueBit task requires to periods of timeouts so you will need to use the skip command in the truebit-os shell.
+
+For best results (skip can be a bit finnicky):
+```
+skip 300
+skip 300
+```
+
+Ends challenge period
+
+```
+skip 300
+skip 300
+```
+
+Task is finalized, and result should show up on the web page.
 
