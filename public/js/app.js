@@ -12,11 +12,11 @@ var fileSystem, scryptSubmitter, account
 
 function getTruebitScrypt(data) {
 
-    return scryptSubmitter.submitData(data, {gas: 200000}).then(function(txHash) {
+    return scryptSubmitter.submitData(data, {gas: 2000000, from: account}).then(function(txHash) {
 
 	const gotFilesEvent = scryptSubmitter.GotFiles()
 
-	let fileID = new Promise((resolve, reject) => {
+	return new Promise((resolve, reject) => {
 	    gotFilesEvent.watch(function(err, result) {
 		if (result) {
 		    gotFilesEvent.stopWatching(x => {})
@@ -26,10 +26,8 @@ function getTruebitScrypt(data) {
 		}
 	    })	    
 	})
-
-	return fileID
     }).then(function(fileID) {
-	return scryptSubmitter.getData.call(fileID)
+	return fileSystem.getData.call(fileID)
     }).then(function(lst) {
 	return lst[0]
     })
@@ -41,9 +39,9 @@ window.runScrypt = function () {
     hash = s.crypto_scrypt(data, "foo", 1024, 1, 1, 256)
     document.getElementById('js-scrypt').innerHTML = showJSScrypt(s.to_hex(hash))
 
-    truHash = getTruebitScrypt(data)
-
-    document.getElementById('tb-scrypt').innerHTML = showTruebitScrypt(truHash)
+    getTruebitScrypt(data).then(function(truHash) {
+	document.getElementById('tb-scrypt').innerHTML = showTruebitScrypt(truHash)
+    })    
 }
 
 function getArtifacts(networkName) {
@@ -70,7 +68,7 @@ function getArtifacts(networkName) {
 
 	    scryptSubmitter = await scryptSubmitter.at(artifacts.scrypt.address)
 
-	    account = window.web3.eth.defaultAccount
+	    account = window.web3.eth.defaultAccount	   
 	}
     }
 

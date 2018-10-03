@@ -4,7 +4,7 @@ This repository serves as an example project that uses truebit-os as a dependenc
 
 # Installation
 
-Make sure you already have `solc` installed and an Ethereum node on port 8545.
+Make sure you already have `solc` installed and an Ethereum node on port 8545. You will also need browserify.
 
 ```
 npm i
@@ -12,6 +12,7 @@ npm i
 chmod 755 install_truebit_os.sh
 ./install_truebit_os.sh
 
+browserify public/js/app.js -o public/js/bundle.js
 ```
 
 # Usage
