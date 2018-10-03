@@ -6,7 +6,13 @@ This repository serves as an example project that uses truebit-os as a dependenc
 
 # Installation
 
-Make sure you already have `solc` installed and an Ethereum node on port 8545. You will also need browserify.
+You will need:
+
+- `npm` installed
+- `solc` installed
+- An Ethereum node on port 8545 (`ganache-cli`)
+- `ipfs daemon` on port 5001
+- `browserify` installed
 
 ```
 npm i
@@ -19,7 +25,7 @@ browserify public/js/app.js -o public/js/bundle.js
 
 # Usage
 
-Start truebit-os in the background. You will also need to be running an ipfs daemon on port 5001
+In a separate terminal window start truebit-os in the background.
 
 ```
 cd truebit-os
@@ -31,7 +37,7 @@ This will start up the shell. We can start a solver on account 1 like so:
 start solve -a 1
 ```
 
-We need to deploy the Scrypt contract that the webapp will be interfacing with. We can do this by running:
+In a new terminal window, we need to deploy the Scrypt contract that the webapp will be interfacing with. We can do this by running:
 
 ```
 node deploy.js
@@ -46,9 +52,9 @@ node index.js
 
 And navigate to `localhost:3000` in a MetaMask compatible browser.
 
-Make sure to connect MetaMask to localhost:8545, and send the initial account some Ether so it can send transactions.
+Make sure to connect MetaMask to localhost:8545, and send the initial account some Ether so it can send transactions. The easiest way is to import the private key of an account in `ganache-cli` and then send some Ether to Account 1.
 
-Once you send the transaction it will wait for the task to complete. The TrueBit task requires to periods of timeouts so you will need to use the skip command in the truebit-os shell.
+Once you enter some text, and press Submit. It will fire off a TrueBit task and wait for the task to complete. The TrueBit task requires two periods of timeouts so you will need to use the skip command in the truebit-os shell.
 
 For best results (skip can be a bit finnicky):
 ```
@@ -63,5 +69,5 @@ skip 300
 skip 300
 ```
 
-Task is finalized, and result should show up on the web page.
+Once the task is finalized the results should show up on the web page.
 
