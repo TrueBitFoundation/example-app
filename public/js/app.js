@@ -34,10 +34,17 @@ function getTruebitScrypt(data) {
     
 }
 
+function calcScrypt(str) {
+    let arr = new Uint8Array(80);
+    let tmp = s.encode_utf8(str);
+    for (let i = 0; i < 80 && i < tmp.length; i++) arr[i] = tmp[i];
+    return s.crypto_scrypt(arr, arr, 1024, 1, 1, 32);
+}
+
 window.runScrypt = function () {
     data = document.getElementById('input-data').value
-    hash = s.crypto_scrypt(data, "foo", 1024, 1, 1, 256)
-    document.getElementById('js-scrypt').innerHTML = showJSScrypt(s.to_hex(hash))
+    hash = calcScrypt(data)
+    document.getElementById('js-scrypt').innerHTML = showJSScrypt("0x" + s.to_hex(hash))
 
     getTruebitScrypt(data).then(function(truHash) {
 	document.getElementById('tb-scrypt').innerHTML = showTruebitScrypt(truHash)

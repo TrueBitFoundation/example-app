@@ -14,4 +14,4 @@ app.get('/contracts', function (req, res) {
     res.send(JSON.stringify(artifacts))
 })
 
-app.listen(port, () => console.log(`Example app listening on port ${port}!`))
+app.listen(port, () => console.log(`TrueBit example-app listening on port ${port}!`))
