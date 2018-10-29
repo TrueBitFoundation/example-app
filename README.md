@@ -4,6 +4,8 @@
 
 This repository serves as an example project that uses truebit-os as a dependency.
 
+[Video demonstration](https://www.youtube.com/watch?v=dDzPCMBlZN4)
+
 # Installation
 
 You will need:
