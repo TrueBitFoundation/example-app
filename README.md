@@ -73,3 +73,6 @@ skip 300
 
 Once the task is finalized the results should show up on the web page.
 
+# License
+
+MIT License
