@@ -1,4 +1,4 @@
-git clone git@github.com:TrueBitFoundation/truebit-os.git
+git clone git@github.com:TrueBitFoundation/truebit-os.git 
 
 cd truebit-os
 npm i
